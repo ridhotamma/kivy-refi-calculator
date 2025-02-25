@@ -2,7 +2,7 @@
 
 <MainWidget>:
     orientation: 'vertical'
-    # Top menu bar with Calculator and History buttons.
+    # Top menu bar with Calculator, History, and Settings buttons.
     BoxLayout:
         size_hint_y: None
         height: 50
@@ -10,14 +10,19 @@
         padding: 10
         Button:
             text: "Calculator"
-            font_size: 20
+            font_size: app.base_font_size
             background_color: 0.3, 0.3, 0.45, 1
             on_press: root.switch_screen("calc")
         Button:
             text: "History"
-            font_size: 20
+            font_size: app.base_font_size
             background_color: 0.3, 0.3, 0.45, 1
             on_press: root.switch_screen("history")
+        Button:
+            text: "Settings"
+            font_size: app.base_font_size
+            background_color: 0.3, 0.3, 0.45, 1
+            on_press: root.switch_screen("settings")
     ScreenManager:
         id: screen_manager
         Screen:
@@ -29,15 +34,19 @@
             name: "history"
             HistoryScreen:
                 id: history_screen
+        Screen:
+            name: "settings"
+            SettingsScreen:
+                id: settings_screen
 
 <RefiCalculatorWidget>:
-    # Calculator screen layout (split view: input on left, results on right)
+    # Calculator screen layout (input on left, results on right)
     orientation: 'horizontal'
     padding: 10
     spacing: 10
     canvas.before:
         Color:
-            rgba: 0.12, 0.16, 0.2, 1  # Dark blue background
+            rgba: 0.12, 0.16, 0.2, 1
         Rectangle:
             pos: self.pos
             size: self.size
@@ -49,7 +58,7 @@
         spacing: 10
         Label:
             text: "Refinance Calculator"
-            font_size: 28
+            font_size: app.base_font_size * 1.4
             size_hint_y: None
             height: 50
             color: 1, 1, 1, 1
@@ -60,73 +69,73 @@
             spacing: 5
             Label:
                 text: "Current Loan Amount:"
-                font_size: 20
+                font_size: app.base_font_size
                 color: 1, 1, 1, 1
             TextInput:
                 id: current_loan
                 multiline: False
                 hint_text: "e.g., 250000"
-                font_size: 20
+                font_size: app.base_font_size
                 background_color: 0.25, 0.25, 0.35, 1
                 foreground_color: 1, 1, 1, 1
             Label:
                 text: "Current Interest Rate (%):"
-                font_size: 20
+                font_size: app.base_font_size
                 color: 1, 1, 1, 1
             TextInput:
                 id: current_rate
                 multiline: False
                 hint_text: "e.g., 4.5"
-                font_size: 20
+                font_size: app.base_font_size
                 background_color: 0.25, 0.25, 0.35, 1
                 foreground_color: 1, 1, 1, 1
             Label:
                 text: "Remaining Term (years):"
-                font_size: 20
+                font_size: app.base_font_size
                 color: 1, 1, 1, 1
             TextInput:
                 id: remaining_term
                 multiline: False
                 hint_text: "e.g., 20"
-                font_size: 20
+                font_size: app.base_font_size
                 background_color: 0.25, 0.25, 0.35, 1
                 foreground_color: 1, 1, 1, 1
             Label:
                 text: "New Interest Rate (%):"
-                font_size: 20
+                font_size: app.base_font_size
                 color: 1, 1, 1, 1
             TextInput:
                 id: new_rate
                 multiline: False
                 hint_text: "e.g., 3.5"
-                font_size: 20
+                font_size: app.base_font_size
                 background_color: 0.25, 0.25, 0.35, 1
                 foreground_color: 1, 1, 1, 1
             Label:
                 text: "New Term (years):"
-                font_size: 20
+                font_size: app.base_font_size
                 color: 1, 1, 1, 1
             TextInput:
                 id: new_term
                 multiline: False
                 hint_text: "e.g., 20"
-                font_size: 20
+                font_size: app.base_font_size
                 background_color: 0.25, 0.25, 0.35, 1
                 foreground_color: 1, 1, 1, 1
             Label:
                 text: "Refinance Costs:"
-                font_size: 20
+                font_size: app.base_font_size
                 color: 1, 1, 1, 1
             TextInput:
                 id: refi_costs
                 multiline: False
                 hint_text: "e.g., 3000"
-                font_size: 20
+                font_size: app.base_font_size
                 background_color: 0.25, 0.25, 0.35, 1
                 foreground_color: 1, 1, 1, 1
         Button:
             text: "Calculate"
-            font_size: 20
+            font_size: app.base_font_size
             size_hint_y: None
             height: 50
             background_color: 0.3, 0.3, 0.45, 1
@@ -139,7 +148,7 @@
         spacing: 10
         Label:
             text: "Results"
-            font_size: 28
+            font_size: app.base_font_size * 1.4
             size_hint_y: None
             height: 50
             color: 1, 1, 1, 1
@@ -149,7 +158,7 @@
             halign: 'center'
             valign: 'middle'
             text_size: self.size
-            font_size: 20
+            font_size: app.base_font_size
             color: 1, 1, 1, 1
 
 <HistoryScreen>:
@@ -165,7 +174,7 @@
             size: self.size
     Label:
         text: "Calculation History"
-        font_size: 28
+        font_size: app.base_font_size * 1.4
         size_hint_y: None
         height: 50
         color: 1, 1, 1, 1
@@ -177,3 +186,41 @@
             spacing: 10
             size_hint_y: None
             height: self.minimum_height
+
+<SettingsScreen>:
+    # Settings screen with a slider to adjust the global font size.
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+    canvas.before:
+        Color:
+            rgba: 0.12, 0.16, 0.2, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        text: "Settings"
+        font_size: app.base_font_size * 1.4
+        size_hint_y: None
+        height: 50
+        color: 1, 1, 1, 1
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+        Label:
+            text: "Adjust Font Size:"
+            font_size: app.base_font_size
+            color: 1, 1, 1, 1
+        Slider:
+            id: font_slider
+            min: 10
+            max: 40
+            value: app.base_font_size
+            on_value: app.base_font_size = self.value
+    Button:
+        text: "Back"
+        size_hint_y: None
+        height: 50
+        font_size: app.base_font_size
+        background_color: 0.3, 0.3, 0.45, 1
+        on_press: app.root.switch_screen("calc")

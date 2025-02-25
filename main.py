@@ -1,6 +1,6 @@
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, NumericProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.button import Button
@@ -17,7 +17,9 @@ class MainWidget(BoxLayout):
         history_list = self.ids.history_screen.ids.history_list
         summary = entry_text.splitlines()[0]
         btn = Button(text=summary, size_hint_y=None, height=40,
-                     background_color=(0.3, 0.3, 0.45, 1), font_size=16)
+                     background_color=(0.3, 0.3, 0.45, 1))
+        # Bind the button's font size to the global setting:
+        btn.font_size = App.get_running_app().base_font_size
         btn.bind(on_release=lambda instance: self.show_history_detail(entry_text))
         history_list.add_widget(btn)
 
@@ -62,8 +64,8 @@ class RefiCalculatorWidget(BoxLayout):
             monthly_current_rate = current_rate / 100 / 12
             current_n = remaining_term * 12
             if monthly_current_rate != 0:
-                current_monthly_payment = current_loan * (monthly_current_rate * (
-                    1 + monthly_current_rate) ** current_n) / (((1 + monthly_current_rate) ** current_n) - 1)
+                current_monthly_payment = current_loan * (monthly_current_rate *
+                                                          (1 + monthly_current_rate) ** current_n) / (((1 + monthly_current_rate) ** current_n) - 1)
             else:
                 current_monthly_payment = current_loan / current_n
 
@@ -74,9 +76,8 @@ class RefiCalculatorWidget(BoxLayout):
             monthly_new_rate = new_rate / 100 / 12
             new_n = new_term * 12
             if monthly_new_rate != 0:
-                new_monthly_payment = current_loan * \
-                    (monthly_new_rate * (1 + monthly_new_rate) ** new_n) / \
-                    (((1 + monthly_new_rate) ** new_n) - 1)
+                new_monthly_payment = current_loan * (monthly_new_rate *
+                                                      (1 + monthly_new_rate) ** new_n) / (((1 + monthly_new_rate) ** new_n) - 1)
             else:
                 new_monthly_payment = current_loan / new_n
 
@@ -132,7 +133,14 @@ class HistoryScreen(BoxLayout):
     pass
 
 
+class SettingsScreen(BoxLayout):
+    pass
+
+
 class RefiCalculatorApp(App):
+    # Global font size that all widgets will use.
+    base_font_size = NumericProperty(20)
+
     def build(self):
         return MainWidget()
 
