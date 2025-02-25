@@ -1,0 +1,179 @@
+#:kivy 2.3.1
+
+<MainWidget>:
+    orientation: 'vertical'
+    # Top menu bar with Calculator and History buttons.
+    BoxLayout:
+        size_hint_y: None
+        height: 50
+        spacing: 10
+        padding: 10
+        Button:
+            text: "Calculator"
+            font_size: 20
+            background_color: 0.3, 0.3, 0.45, 1
+            on_press: root.switch_screen("calc")
+        Button:
+            text: "History"
+            font_size: 20
+            background_color: 0.3, 0.3, 0.45, 1
+            on_press: root.switch_screen("history")
+    ScreenManager:
+        id: screen_manager
+        Screen:
+            name: "calc"
+            BoxLayout:
+                RefiCalculatorWidget:
+                    id: calc_widget
+        Screen:
+            name: "history"
+            HistoryScreen:
+                id: history_screen
+
+<RefiCalculatorWidget>:
+    # Calculator screen layout (split view: input on left, results on right)
+    orientation: 'horizontal'
+    padding: 10
+    spacing: 10
+    canvas.before:
+        Color:
+            rgba: 0.12, 0.16, 0.2, 1  # Dark blue background
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    # Left panel: Input form
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_x: 0.5
+        spacing: 10
+        Label:
+            text: "Refinance Calculator"
+            font_size: 28
+            size_hint_y: None
+            height: 50
+            color: 1, 1, 1, 1
+        GridLayout:
+            cols: 2
+            row_default_height: 50
+            row_force_default: True
+            spacing: 5
+            Label:
+                text: "Current Loan Amount:"
+                font_size: 20
+                color: 1, 1, 1, 1
+            TextInput:
+                id: current_loan
+                multiline: False
+                hint_text: "e.g., 250000"
+                font_size: 20
+                background_color: 0.25, 0.25, 0.35, 1
+                foreground_color: 1, 1, 1, 1
+            Label:
+                text: "Current Interest Rate (%):"
+                font_size: 20
+                color: 1, 1, 1, 1
+            TextInput:
+                id: current_rate
+                multiline: False
+                hint_text: "e.g., 4.5"
+                font_size: 20
+                background_color: 0.25, 0.25, 0.35, 1
+                foreground_color: 1, 1, 1, 1
+            Label:
+                text: "Remaining Term (years):"
+                font_size: 20
+                color: 1, 1, 1, 1
+            TextInput:
+                id: remaining_term
+                multiline: False
+                hint_text: "e.g., 20"
+                font_size: 20
+                background_color: 0.25, 0.25, 0.35, 1
+                foreground_color: 1, 1, 1, 1
+            Label:
+                text: "New Interest Rate (%):"
+                font_size: 20
+                color: 1, 1, 1, 1
+            TextInput:
+                id: new_rate
+                multiline: False
+                hint_text: "e.g., 3.5"
+                font_size: 20
+                background_color: 0.25, 0.25, 0.35, 1
+                foreground_color: 1, 1, 1, 1
+            Label:
+                text: "New Term (years):"
+                font_size: 20
+                color: 1, 1, 1, 1
+            TextInput:
+                id: new_term
+                multiline: False
+                hint_text: "e.g., 20"
+                font_size: 20
+                background_color: 0.25, 0.25, 0.35, 1
+                foreground_color: 1, 1, 1, 1
+            Label:
+                text: "Refinance Costs:"
+                font_size: 20
+                color: 1, 1, 1, 1
+            TextInput:
+                id: refi_costs
+                multiline: False
+                hint_text: "e.g., 3000"
+                font_size: 20
+                background_color: 0.25, 0.25, 0.35, 1
+                foreground_color: 1, 1, 1, 1
+        Button:
+            text: "Calculate"
+            font_size: 20
+            size_hint_y: None
+            height: 50
+            background_color: 0.3, 0.3, 0.45, 1
+            on_press: root.calculate()
+
+    # Right panel: Results display
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_x: 0.5
+        spacing: 10
+        Label:
+            text: "Results"
+            font_size: 28
+            size_hint_y: None
+            height: 50
+            color: 1, 1, 1, 1
+        Label:
+            id: result_label
+            text: root.result_text
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+            font_size: 20
+            color: 1, 1, 1, 1
+
+<HistoryScreen>:
+    # History screen layout with a scrollable list of past calculations.
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+    canvas.before:
+        Color:
+            rgba: 0.12, 0.16, 0.2, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        text: "Calculation History"
+        font_size: 28
+        size_hint_y: None
+        height: 50
+        color: 1, 1, 1, 1
+    ScrollView:
+        do_scroll_x: False
+        GridLayout:
+            id: history_list
+            cols: 1
+            spacing: 10
+            size_hint_y: None
+            height: self.minimum_height
